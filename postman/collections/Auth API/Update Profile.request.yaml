@@ -1,19 +1,18 @@
 $kind: http-request
 name: Update Profile
 method: PUT
-url: '{{baseUrl}}/api/auth/profile'
+url: "{{baseUrl}}/api/auth/profile"
 order: 4000
 auth:
   type: bearer
   credentials:
-    - key: token
-      value: '{{authToken}}'
+    token: "{{authToken}}"
 headers:
-  - key: Content-Type
-    value: application/json
+  Content-Type: application/json
 body:
   type: json
   content: |-
     {
-      "username": "newusername"
+      "username": "alex1",
+      "email": "alex20@timetoprogram.com"
     }

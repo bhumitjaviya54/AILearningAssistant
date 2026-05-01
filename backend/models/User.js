@@ -31,14 +31,22 @@ const userSchema = new mongoose.Schema({
 });
 
 // Hash password before saving
-userSchema.pre('save', async function (next) {
-    if (!this.isModified('password')) {
-        next();
+userSchema.pre('save', function(next) {
+    // Debug: log the type of next
+    // console.log('typeof next:', typeof next);
+    const user = this;
+    if (!user.isModified('password')) {
+        return next();
     }
-
-    const salt = await bcrypt.genSalt(10);
-    this.password = await bcrypt.hash(this.password, salt);
-})
+    bcrypt.genSalt(10, function(err, salt) {
+        if (err) return next(err);
+        bcrypt.hash(user.password, salt, function(err, hash) {
+            if (err) return next(err);
+            user.password = hash;
+            next();
+        });
+    });
+});
 
 // Compare password method
 userSchema.methods.matchPassword = async function (enteredPassword) {
